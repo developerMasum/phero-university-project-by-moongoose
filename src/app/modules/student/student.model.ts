@@ -1,4 +1,3 @@
-
 import { Schema, model } from 'mongoose';
 
 import {
@@ -80,12 +79,12 @@ const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, required: [true, 'ID is required'], unique: true },
     user: {
-      type:Schema.ObjectId,
-      required:[true,'user id must required '],
-      unique:true,
+      type: Schema.ObjectId,
+      required: [true, 'user id must required '],
+      unique: true,
       ref: 'User',
     },
-  
+
     name: {
       type: userNameSchema,
       required: [true, 'Name is required'],
@@ -133,9 +132,9 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local guardian information is required'],
     },
     profileImg: { type: String },
-    admissionSemester: {type: Schema.ObjectId ,ref:'academicSemester' },
-    academicDepartment: {type: Schema.ObjectId ,ref:'AcademicDepartment' },
-   
+    admissionSemester: { type: Schema.ObjectId, ref: 'academicSemester' },
+    academicDepartment: { type: Schema.ObjectId, ref: 'AcademicDepartment' },
+
     isDeleted: {
       type: Boolean,
       default: false,
@@ -152,8 +151,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 studentSchema.virtual('fullName').get(function () {
   return this.name.firstName + this.name.middleName + this.name.lastName;
 });
-
-
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
@@ -178,6 +175,5 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
