@@ -19,12 +19,12 @@ app.use(cors());
 app.use('/api/v1', router);
 
 
-const getAController = (req: Request, res: Response) => {
+const test = (req: Request, res: Response) => {
   const statusCode = 'its okay '; // Replace with the desired status code
   res.send(statusCode);
 };
 
-app.get('/', getAController);
+app.get('/', test);
 app.use(globalErrorHandler);
 
 // not found
