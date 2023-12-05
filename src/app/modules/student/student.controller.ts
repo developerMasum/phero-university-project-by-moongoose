@@ -5,7 +5,8 @@ import httpStatus from 'http-status';
 // import studentValidationSchema from './student.validation';
 
 const getAllStudents = catchAsync(async (req, res) => {
-  const result = await StudentServices.getAllStudentsFromDB();
+ 
+  const result = await StudentServices.getAllStudentsFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

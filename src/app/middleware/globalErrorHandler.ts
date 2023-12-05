@@ -52,7 +52,9 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
         message: err.message,
       },
     ];
-  } else if (err instanceof err) {
+  } 
+  
+  else if (err instanceof err) {
     message = err?.message;
     errorSources = [
       {
