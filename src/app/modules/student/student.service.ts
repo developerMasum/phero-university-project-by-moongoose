@@ -19,11 +19,11 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     })),
   });
 
-  const exclusiveFields = ['searchTerm'];
+  const exclusiveFields = ['searchTerm','sort','limit'];
   exclusiveFields.forEach((el) => delete queryObj[el]);
-  // console.log({ query, queryObj });
+  console.log({ query, queryObj });
 
-  const result = await searchQuery
+  const filteredQuery =  searchQuery
     .find(queryObj)
     .populate('admissionSemester')
     .populate({
@@ -32,7 +32,19 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty',
       },
     });
-  return result;
+let sort = '-createdAt' ;
+if (query.sort) {
+  sort = query.sort as string
+}
+const sortQuery =  filteredQuery.sort(sort);
+let limit = 1;
+if (query.limit) {
+  limit = query.limit 
+}
+const limitQuery = await sortQuery.limit(limit)
+
+
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
