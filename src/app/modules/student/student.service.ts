@@ -19,11 +19,11 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     })),
   });
 
-  const exclusiveFields = ['searchTerm','sort','limit'];
+  const exclusiveFields = ['searchTerm', 'sort', 'limit','page'];
   exclusiveFields.forEach((el) => delete queryObj[el]);
-  console.log({ query, queryObj });
+  console.log({ query },{queryObj});
 
-  const filteredQuery =  searchQuery
+  const filteredQuery = searchQuery
     .find(queryObj)
     .populate('admissionSemester')
     .populate({
@@ -32,17 +32,25 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty',
       },
     });
-let sort = '-createdAt' ;
-if (query.sort) {
-  sort = query.sort as string
-}
-const sortQuery =  filteredQuery.sort(sort);
-let limit = 1;
-if (query.limit) {
-  limit = query.limit 
-}
-const limitQuery = await sortQuery.limit(limit)
+  let sort = '-createdAt';
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+  const sortQuery = filteredQuery.sort(sort);
+  let page = 1;
+  let skip = 0;
+  let limit = 1;
 
+  if (query.limit) {
+    limit = Number(query.limit);
+  }
+  if (query.page) {
+    limit = Number(query.page);
+    skip = (page - 1) * limit
+  }
+  const paginateQuery = sortQuery.skip(skip);
+
+  const limitQuery = await paginateQuery.limit(limit);
 
   return limitQuery;
 };
